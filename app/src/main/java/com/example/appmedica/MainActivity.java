@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     EditText usuario, passw;
-    Button btnIng;
+    Button btnIng, btnInsertar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         usuario = findViewById(R.id.edtUsuario);
         passw = findViewById(R.id.edtPassword);
-        btnIng = findViewById(R.id.btnLogin);
+        btnIng = findViewById(R.id.btnIng);
+        btnInsertar =findViewById(R.id.btnCrearUsu);
 
         btnIng.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
                 validarLogin("http://192.168.0.101:9191/sistemamedico/remoto_validalogin.php");
             }
         });
+
+        btnInsertar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(getApplicationContext(),RegistroUsuario.class);
+                startActivity(it);
+            }
+        });
+
+
 
     }
 
@@ -90,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
+
 
 
 }

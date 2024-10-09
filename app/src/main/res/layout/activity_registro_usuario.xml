@@ -9,17 +9,25 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:orientation="vertical"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="729dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- Campo para el usuario -->
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="REGISTRO PACIENTE"
+            android:textSize="24sp" />
+
         <EditText
             android:id="@+id/etUsuario"
             android:layout_width="match_parent"
@@ -72,8 +80,8 @@
             android:id="@+id/btnRegistrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registrar"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:text="Registrar" />
 
     </LinearLayout>
 
