@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">appmedica</string>
+
+    <string-array name="especialidad">
+        <item>Pediatria</item>
+        <item>Ginecologia</item>
+        <item>Medicina Familiar</item>
+        <item>Traumatologia</item>
+        <item>Medicina Tradicional</item>
+        <item>Cardiologia</item>
+        <item>Dermatologia</item>
+        <item>Oftalmologia</item>
+        <item>Gineo-obstetricia</item>
+    </string-array>
 </resources>

@@ -59,7 +59,7 @@ public class RegistroUsuario extends AppCompatActivity {
 
     private void insertarUsuario() {
         // URL de la API (cambia esta URL por la de tu servidor)
-        String URL = "http://192.168.218.236:9191/sistemamedico/remoto_insert_usuario.php";
+        String URL = Config.BASE_URL +"/sistemamedico/remoto_insert_usuario.php";
 
         // Crear una solicitud de String con método POST
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,

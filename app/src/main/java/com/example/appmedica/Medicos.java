@@ -1,5 +1,6 @@
 package com.example.appmedica;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -22,27 +23,37 @@ import java.util.ArrayList;
 
 public class Medicos extends AppCompatActivity {
 
-    private ListView listViewUsuarios;
-    private ArrayList<String> usuariosList;
+    private ListView listViewMedicos;
+    private ArrayList<String> medicosList;
     private ArrayAdapter<String> adapter;
+    private String especialidad;  // Nueva variable para la especialidad
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicos);
 
-        listViewUsuarios = findViewById(R.id.lv_medicos);
+        listViewMedicos = findViewById(R.id.lv_medicos);
 
-        usuariosList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, usuariosList);
-        listViewUsuarios.setAdapter(adapter);
+        medicosList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, medicosList);
+        listViewMedicos.setAdapter(adapter);
 
+        // Obtener la especialidad desde el Intent
+        Intent intent = getIntent();
+        especialidad = intent.getStringExtra("especialidad");
 
-        obtenerUsuarios();
+        if (especialidad != null && !especialidad.isEmpty()) {
+            obtenerMedicosPorEspecialidad(especialidad);
+        } else {
+            Toast.makeText(this, "Especialidad no recibida", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void obtenerUsuarios() {
-        String URL = "http://192.168.218.236:9191/sistemamedico/remoto_list_medicos.php";
+    // Método para obtener médicos según la especialidad
+    private void obtenerMedicosPorEspecialidad(String especialidad) {
+        // Incluir la especialidad en la URL como un parámetro GET
+        String URL = Config.BASE_URL + "/sistemamedico/remoto_list_medicos.php?especialidad=" + especialidad;
 
         // Crear una solicitud de JSON Array
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null,
@@ -50,16 +61,19 @@ public class Medicos extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
+                            // Limpiar la lista antes de agregar nuevos datos
+                            medicosList.clear();
+
                             // Iterar sobre los resultados y agregarlos a la lista
                             for (int i = 0; i < response.length(); i++) {
-                                JSONObject usuario = response.getJSONObject(i);
-                                String nombreCompleto = usuario.getString("nombreMed") + " " +
-                                        usuario.getString("apellidoPat") + " " +
-                                        usuario.getString("apellidoMat");
-                                usuariosList.add(nombreCompleto);
+                                JSONObject medico = response.getJSONObject(i);
+                                String nombreCompleto = medico.getString("nombreMed") + " " +
+                                        medico.getString("apellidoPat") + " " +
+                                        medico.getString("apellidoMat");
+                                medicosList.add(nombreCompleto);
                             }
 
-                            // Notificar al adaptador que los datos han cambiado
+                            // Notificar al adaptador que los datos cambiaron
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -70,11 +84,11 @@ public class Medicos extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Error al obtener usuarios: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Error al obtener médicos: " + error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
-
+        // Añadir la solicitud a la cola de solicitudes
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonArrayRequest);
     }

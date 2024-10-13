@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         btnIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validarLogin("http://192.168.218.236:9191/sistemamedico/remoto_validalogin.php");
+                validarLogin(Config.BASE_URL +"/sistemamedico/remoto_validalogin.php");
             }
         });
 

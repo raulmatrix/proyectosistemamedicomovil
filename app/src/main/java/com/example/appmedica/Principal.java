@@ -30,7 +30,7 @@ public class Principal extends AppCompatActivity {
         btnImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(getApplicationContext(),Medicos.class);
+                Intent it = new Intent(getApplicationContext(),Especialidad.class);
                 startActivity(it);
             }
         });
