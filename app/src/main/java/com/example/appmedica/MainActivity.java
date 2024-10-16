@@ -26,42 +26,36 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-
     EditText usuario, passw;
     Button btnIng, btnInsertar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //getActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //getSupportActionBar().hide();
 
         usuario = findViewById(R.id.edtUsuario);
         passw = findViewById(R.id.edtPassword);
         btnIng = findViewById(R.id.btnIng);
-        btnInsertar =findViewById(R.id.btnCrearUsu);
+        btnInsertar = findViewById(R.id.btnCrearUsu);
 
         btnIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validarLogin(Config.BASE_URL +"/sistemamedico/remoto_validalogin.php");
+                validarLogin(Config.BASE_URL + "/sistemamedico/remoto_validalogin.php");
             }
         });
 
         btnInsertar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(getApplicationContext(),RegistroUsuario.class);
+                Intent it = new Intent(getApplicationContext(), RegistroUsuario.class);
                 startActivity(it);
             }
         });
-
-
-
     }
 
-    private void validarLogin(String URL){
+    private void validarLogin(String URL) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -70,8 +64,14 @@ public class MainActivity extends AppCompatActivity {
                     boolean success = jsonResponse.getBoolean("success");
 
                     if (success) {
-                        // Autenticación exitosa
+                        // Autenticación exitosa, obtenemos el idUsuario y el nombreUsuario
+                        int idUsuario = jsonResponse.getInt("idUsuario");
+                        String nombreUsuario = jsonResponse.getString("nombreUsuario");
+
+                        // Pasamos los datos a la actividad Principal
                         Intent intent = new Intent(getApplicationContext(), Principal.class);
+                        intent.putExtra("idUsuario", idUsuario);
+                        intent.putExtra("nombreUsuario", nombreUsuario);
                         startActivity(intent);
                     } else {
                         // Autenticación fallida
@@ -101,8 +101,4 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-
-
-
 }

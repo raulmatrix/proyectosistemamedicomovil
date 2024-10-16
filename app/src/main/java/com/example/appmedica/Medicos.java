@@ -25,8 +25,11 @@ public class Medicos extends AppCompatActivity {
 
     private ListView listViewMedicos;
     private ArrayList<String> medicosList;
+    private ArrayList<Integer> medicosIdList; // Nueva lista para almacenar los IDs de los médicos
     private ArrayAdapter<String> adapter;
-    private String especialidad;  // Nueva variable para la especialidad
+    private String especialidad;
+    private int idUsuario; // Para almacenar el idUsuario
+    private String nombreUsuario; // Para almacenar el nombreUsuario
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +39,37 @@ public class Medicos extends AppCompatActivity {
         listViewMedicos = findViewById(R.id.lv_medicos);
 
         medicosList = new ArrayList<>();
+        medicosIdList = new ArrayList<>(); // Inicializamos la lista de IDs de médicos
+
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, medicosList);
         listViewMedicos.setAdapter(adapter);
 
-        // Obtener la especialidad desde el Intent
+        // Obtener los datos desde el Intent
         Intent intent = getIntent();
         especialidad = intent.getStringExtra("especialidad");
+        idUsuario = intent.getIntExtra("idUsuario", -1); // Recibir el idUsuario
+        nombreUsuario = intent.getStringExtra("nombreUsuario"); // Recibir el nombreUsuario
 
         if (especialidad != null && !especialidad.isEmpty()) {
             obtenerMedicosPorEspecialidad(especialidad);
         } else {
             Toast.makeText(this, "Especialidad no recibida", Toast.LENGTH_SHORT).show();
         }
+
+        // Configurar el listener para el click en un médico
+        listViewMedicos.setOnItemClickListener((parent, view, position, id) -> {
+            String nombreMedico = medicosList.get(position); // Obtener el nombre completo del médico seleccionado
+            int idMedico = medicosIdList.get(position); // Obtener el id del médico seleccionado
+
+            // Enviar al siguiente Activity el nombre y el ID del médico, además de idUsuario y nombreUsuario
+            Intent intent2 = new Intent(Medicos.this, Horarios.class);
+            intent2.putExtra("nombreMedico", nombreMedico); // Pasar el nombre del médico
+            intent2.putExtra("idMedico", idMedico); // Pasar el ID del médico
+            intent2.putExtra("idUsuario", idUsuario); // Pasar el idUsuario
+            intent2.putExtra("nombreUsuario", nombreUsuario); // Pasar el nombreUsuario
+            intent2.putExtra("especialidad", especialidad); // Pasar la especialidad
+            startActivity(intent2); // Iniciar el nuevo Activity
+        });
     }
 
     // Método para obtener médicos según la especialidad
@@ -63,14 +85,21 @@ public class Medicos extends AppCompatActivity {
                         try {
                             // Limpiar la lista antes de agregar nuevos datos
                             medicosList.clear();
+                            medicosIdList.clear(); // Limpiar también la lista de IDs de médicos
 
                             // Iterar sobre los resultados y agregarlos a la lista
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject medico = response.getJSONObject(i);
+
+                                // Obtener los datos del médico
                                 String nombreCompleto = medico.getString("nombreMed") + " " +
                                         medico.getString("apellidoPat") + " " +
                                         medico.getString("apellidoMat");
+                                int idMedico = medico.getInt("idMedico");
+
+                                // Agregar a las listas
                                 medicosList.add(nombreCompleto);
+                                medicosIdList.add(idMedico);
                             }
 
                             // Notificar al adaptador que los datos cambiaron
