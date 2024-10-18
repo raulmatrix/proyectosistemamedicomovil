@@ -12,5 +12,4 @@
         android:text="Detalles de la reserva"
         android:textSize="18sp"
         android:textStyle="bold" />
-
 </LinearLayout>

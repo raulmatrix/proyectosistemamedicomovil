@@ -45,8 +45,7 @@ public class Horarios extends AppCompatActivity {
             Toast.makeText(this, "Error: No se recibió el nombre del médico", Toast.LENGTH_LONG).show();
         }
 
-        // Aquí podrías mostrar o usar el idUsuario y nombreUsuario si es necesario
-        // Por ejemplo:
+
         Toast.makeText(this, "Usuario: " + nombreUsuario + " (ID: " + idUsuario + ")", Toast.LENGTH_LONG).show();
 
         // Obtener y mostrar los horarios
@@ -79,8 +78,14 @@ public class Horarios extends AppCompatActivity {
         int endHour = 16;
 
         for (int hour = startHour; hour < endHour; hour++) {
-            horarios.add(hour + ":00 AM");
-            horarios.add(hour + ":30 AM");
+            if(hour>(endHour/2)){
+                horarios.add(hour + ":00 PM");
+                horarios.add(hour + ":30 PM");
+            }else{
+                horarios.add(hour + ":00 AM");
+                horarios.add(hour + ":30 AM");
+            }
+
         }
         horarios.add(endHour + ":00 PM");
         return horarios;
